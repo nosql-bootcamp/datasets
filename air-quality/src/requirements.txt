@@ -1,0 +1,4 @@
+cassandra-driver==3.8.0
+convertdate==2.1.0
+dateparser==0.5.1
+elasticsearch==5.2.0
