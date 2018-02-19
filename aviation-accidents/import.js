@@ -5,7 +5,8 @@ var fs = require('fs');
 var esClient = new elasticsearch.Client({
   host: 'localhost:9200',
   log: 'error',
-  requestTimeout: Infinity
+  requestTimeout: Infinity,
+  keepAlive: false // For windows users maybe
 });
 
 var emptyToNull = function(str) {
