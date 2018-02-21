@@ -27,12 +27,14 @@ const insertUsers = (db, callback) => {
                   "_id": data.user_id,
                   "name": data.name,
                   "since": data.yelping_since,
-                  "numberOfReviews": data.review_count,
-                  "numberOfUsefulReviews": data.useful,
-                  "numberOfFunnyReviews": data.funny,
-                  "numberOfCoolReviews": data.cool,
+                  "numberOfReviews": parseInt(data.review_count, 10),
+                  "numberOfUsefulReviews": parseInt(data.useful, 10),
+                  "numberOfFunnyReviews": parseInt(data.funny, 10),
+                  "numberOfCoolReviews": parseInt(data.cool, 10),
                   "numberOfFriends": data.friends.split(", ").length,
-                  "numberOfFans": data.fans
+                  "numberOfFans": parseInt(data.fans, 10),
+                  "averageStars": parseFloat(data.average_stars),
+                  "reviews": []
               });
               if (users.length >= BULK_SIZE) {
                 collection.insertMany(users, (err, result) => {
