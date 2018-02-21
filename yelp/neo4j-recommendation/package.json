@@ -1,0 +1,7 @@
+{
+  "name": "yelp-recommendation",
+  "version": "1.0.0",
+  "dependencies": {
+    "csv-parser": "1.11.0"
+  }
+}
