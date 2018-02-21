@@ -4,8 +4,7 @@ const fs = require('fs');
 
 const log = require('single-line-log').stdout;
 const colors = require('colors');
-
-const moment = require('moment');
+const prettyMs = require('pretty-ms');
 
 const MongoClient = mongodb.MongoClient;
 const mongoUrl = 'mongodb://localhost:27017';
@@ -61,8 +60,7 @@ const insertUsers = (db, callback) => {
 }
 
 MongoClient.connect(mongoUrl, (err, client) => {
-  const startTime = new Date().getTime()
-  const start = moment(startTime).format("HH:mm:ss")
+  const start = new Date()
   console.log(`Starting script execution at: ${start}`.cyan)
 
   if (err) {
@@ -75,11 +73,11 @@ MongoClient.connect(mongoUrl, (err, client) => {
       setTimeout(() => {
         console.log(); // new line
         console.log('All user reviews inserted successfully!'.green);
-        
+
         client.close();
 
-        const executionTime = new Date().getTime() - startTime;
-        const readableExecutionTime = moment.duration(executionTime).humanize()
+        const executionTime = new Date().getTime() - start.getTime();
+        const readableExecutionTime = prettyMs(executionTime);
         console.log(`Script execution time is: ${readableExecutionTime}`.cyan);
       }, 5000)
   });
