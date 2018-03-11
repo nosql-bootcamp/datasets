@@ -9,11 +9,12 @@ Quelques pièges dans les données, qui peuvent être bloquant lors de l'import 
 * Collisions d'ids entres les users et les business
 * Relations faisant référence à des users inexistants
 * Le champ name contient pas mal de caractères spéciaux, il vaut donc mieux les neutraliser en le "double quotant"
+* Beaucoup de cibles manquantes pour les relations de friend
 
 ## Import neo4J
 
 ```
-rm -rf ./data/databases/yelp.db && ./bin/neo4j-admin import --nodes:User ~/projets/yelp/out/users.csv --nodes:Business ~/projets/yelp/out/business.csv --relationships:LIKED ~/projets/yelp/out/notes.csv --database=yelp.db --id-type string --ignore-missing-nodes=true
+rm -rf ./data/databases/yelp.db && ./bin/neo4j-admin import --nodes:User ~/projets/yelp/out/users.csv --nodes:Business ~/projets/yelp/out/business.csv --relationships:LIKED ~/projets/yelp/out/notes.csv --relationships:FRIEND ~/projets/yelp/out/friendships.csv --database=yelp.db --id-type string --ignore-missing-nodes=true
 ```
 
 ## Requete neo4j
@@ -35,7 +36,6 @@ AND "Restaurants" IN otherBusiness.categories
 RETURN e, b, otherUser, otherBusiness;
 ```
 
-
 ### Suggestion par liste d'établissement
 
 ```
@@ -43,4 +43,10 @@ MATCH (e:User)-[:LIKED]->(b:Business)<-[:LIKED]-(otherUser:User)-[:LIKED]->(othe
 WHERE b.name IN ["Zur Kate", "Groucho's Deli", "Potluck Restaurant"]
 AND any(cat1 IN otherBusiness.categories WHERE cat1 IN b.categories)
 RETURN e, b, otherUser, otherBusiness;
+```
+
+### Suggestion en utilisant les amis
+
+```
+MATCH(e:User {user_id:"u_dyhTHLIf6eWBvU78Y3T06A"})-[:FRIEND]->(friend:User)-[:LIKED]->(bs:Business) return e, friend, bs
 ```
